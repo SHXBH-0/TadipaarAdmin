@@ -82,6 +82,7 @@ if (user.role === "CRIMINAL") {
           <p>DCP → dcp_pune / 123456</p>
           <p>ACP → acp_zone1 / 123456</p>
           <p>Station → station_admin / 123456</p>
+          <p>Criminal → ramesh_k / 123</p>
         </div>
       </div>
     </div>
