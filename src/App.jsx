@@ -9,6 +9,7 @@ import CriminalsScreen from "./AdminDashboard/CriminalsScreen";
 import RestrictedAreasScreen from "./AdminDashboard/RestrictedAreasScreen";
 import TadipaarTrackingScreen from "./AdminDashboard/TadipaarTrackingScreen";
 import Profile from "./AdminDashboard/Profile";
+import CriminalDashboard from "./pages/CriminalDashboard";
 
 /* 🔷 Layout */
 import Sidebar from "./components/Sidebar";
@@ -25,6 +26,8 @@ function ProtectedRoute({ children, allowedRoles }) {
 
   // 🔒 Role not allowed
   if (allowedRoles && !allowedRoles.includes(user.role)) {
+    // If criminal is logged in, don't let them see admin sidebar
+    if (user.role === 'CRIMINAL') return <Navigate to="/my-dashboard" replace />;
     return <Navigate to="/" replace />;
   }
 
@@ -34,7 +37,6 @@ function ProtectedRoute({ children, allowedRoles }) {
 /* ================= APP ================= */
 
 export default function App() {
-  // 🔥 GLOBAL SIDEBAR STATE (IMPORTANT)
   const [collapsed, setCollapsed] = useState(
     localStorage.getItem("sidebarCollapsed") === "true"
   );
@@ -42,19 +44,26 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* 🔓 LOGIN (Standalone — NO sidebar) */}
+        {/* 🔓 LOGIN */}
         <Route path="/login" element={<Login />} />
 
-        {/* 🔐 PROTECTED APP */}
+        {/* 👮 CRIMINAL DASHBOARD (No Sidebar) */}
+        <Route 
+          path="/my-dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={["CRIMINAL"]}>
+              <CriminalDashboard />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* 🔐 PROTECTED ADMIN APP */}
         <Route
           path="/*"
           element={
             <ProtectedRoute allowedRoles={["DCP", "ACP", "STATION_ADMIN"]}>
               <div className="flex bg-[#F4F6F9] min-h-screen">
-                {/* ✅ Sidebar */}
                 <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-
-                {/* ✅ Main Content — GAP FIXED */}
                 <main
                   className={`flex-1 transition-all duration-300 ${
                     collapsed ? "ml-20" : "ml-64"
@@ -62,7 +71,6 @@ export default function App() {
                 >
                   <Routes>
                     <Route path="/" element={<DashboardHome />} />
-
                     <Route
                       path="/officers"
                       element={
@@ -71,19 +79,10 @@ export default function App() {
                         </ProtectedRoute>
                       }
                     />
-
                     <Route path="/criminals" element={<CriminalsScreen />} />
-                    <Route
-                      path="/restricted-areas"
-                      element={<RestrictedAreasScreen />}
-                    />
-                    <Route
-                      path="/tadipaar-tracking"
-                      element={<TadipaarTrackingScreen />}
-                    />
+                    <Route path="/restricted-areas" element={<RestrictedAreasScreen />} />
+                    <Route path="/tadipaar-tracking" element={<TadipaarTrackingScreen />} />
                     <Route path="/profile" element={<Profile />} />
-
-                    {/* fallback */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </main>

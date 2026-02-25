@@ -25,11 +25,13 @@ export default function Login() {
       return;
     }
 
-    // 🔥 store session
     localStorage.setItem("user", JSON.stringify(user));
 
-    // redirect
-    window.location.href = "/";
+if (user.role === "CRIMINAL") {
+  window.location.href = "/criminal-dashboard";
+} else {
+  window.location.href = "/";
+}
   };
 
   return (
