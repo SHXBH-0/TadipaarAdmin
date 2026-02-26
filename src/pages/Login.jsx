@@ -29,6 +29,10 @@ export default function Login() {
 
 if (user.role === "CRIMINAL") {
   window.location.href = "/criminal-dashboard";
+} else if (["DCP", "ACP", "CP"].includes(user.role)) {
+      window.location.href = "/oversight-dashboard";
+    } else if (user.role === "STATION_ADMIN") {
+  window.location.href = "/station-tracking"; // Redirect to the specific station page
 } else {
   window.location.href = "/";
 }

@@ -10,6 +10,8 @@ import RestrictedAreasScreen from "./AdminDashboard/RestrictedAreasScreen";
 import TadipaarTrackingScreen from "./AdminDashboard/TadipaarTrackingScreen";
 import Profile from "./AdminDashboard/Profile";
 import CriminalDashboard from "./pages/CriminalDashboard";
+import StationAdminPreview from "./pages/StationAdminPreview"; 
+import OverSightDashboard from "./pages/OverSightDashboard";
 
 /* 🔷 Layout */
 import Sidebar from "./components/Sidebar";
@@ -90,6 +92,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/oversight-dashboard" element={<OverSightDashboard />} />
+        <Route path="/station-tracking" element={<StationAdminPreview />} />
+        
       </Routes>
     </Router>
   );
